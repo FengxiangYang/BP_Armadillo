@@ -1,2 +1,4 @@
-# BP_Armadillo
-A simple C++ BP neural network program using Armadillo library
+# Neural_Armadillo
+A C++ baased implementation of some neural network models using Armadillo library
+
+To be continued...
