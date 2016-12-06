@@ -1,40 +1,49 @@
-#pragma once
+//
+// Created by yfx on 16-12-4.
+//
+
+#ifndef BP_BPNET_H
+#define BP_BPNET_H
 #include <iostream>
 #include <armadillo>
 #include "vector"
 using namespace std;
 using namespace arma;
-typedef struct InputLayer//输入层结构体定义
+//defination of input layer
+typedef struct InputL
 {
-	mat SampleData, Value;//输入的样本向量以及训练数据矩阵
+    mat Value,Samples;
 }Input;
-typedef struct HiddenLayer//隐层结构体定义
+//defination of hidden layer
+typedef struct HiddenL
 {
-	mat w, delta, Dw, Value, Response;//定义权重矩阵，残差矩阵，权重梯度矩阵，输入值矩阵，sig激活值矩阵
-	double bias, Db;//定义偏执
+    mat w,Dw,delta,Value,Response;//weight response
+    double b,Db;//bias and its d
 }Hidden;
-typedef struct Outlayer//输出层结构体定义
+//defination of output layer
+typedef struct OutputL
 {
-	mat w, Dw,Value,delta,Response,Label,LabelData;//定义权重矩阵，残差矩阵，权重梯度矩阵，输入值矩阵，sig激活值矩阵以及标签
+    mat w,Dw,Value,Response,Labels,Label,delta;//weight matrix and others
 }Out;
 class BPnet
 {
 public:
-	BPnet(mat Data,mat Labels);//构造函数
-	BPnet(BPnet &net);//拷贝构造函数
-	mat sigmoid(mat vec);//求取sigmoid相应
-	void forward();//误差前向传播
-	void backproporgation();//误差反向传播
-	void train();//训练函数
-	void predict(mat Data);//测试函数
-	~BPnet();//析构
+    BPnet(mat Data,mat Label);//construct func
+    BPnet(BPnet &net);//copy construct func
+    void forward();//forward
+    void backpropogation();//BP
+    void train();
+    void predict(mat Test);//predict func
+    mat sigmoid(mat data);//sig func
+    ~BPnet();//destructor
 public:
-	int  HiddenLayerNum;//隐层层数
-	int InputNeuronNum, OutNeuronNum;//输入与输出神经元数
-	vector<int>  HiddenNeuronNum;//隐层神经元每一层的数目
-	double err, alpha, lambda, eplision;//代价函数,学习速率，正则项系数
-	Out *OutLayer;//输出层
-	vector<Hidden*>HiddenLayer;//隐层指针vector,使用vector方便动态分配
-	Input *InputLayer;//输入层
+    int OutNeuronNum,InputNeuronNum,HiddenLayerNum;
+    double alpha,lambda,eplision,cost;//learning rate,weight decay,eplision and cost func
+    vector<int>HiddenNeuronNum;
+    Input *InputLayer;//in layer
+    vector<Hidden*> HiddenLayer;//hidden layer
+    Out *OutLayer;//outlayer
 };
 
+
+#endif //BP_BPNET_H
